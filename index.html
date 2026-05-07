@@ -1,0 +1,407 @@
+
+final_html_v2 = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sameer Mohammed — AI × Marketing Portfolio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0a1628;
+      --navy-mid: #112040;
+      --gold: #f0a500;
+      --gold-dim: #c48400;
+      --surface: #f5f4f0;
+      --surface2: #eceae3;
+      --text: #0a1628;
+      --text-muted: #556080;
+      --border: rgba(10,22,40,0.12);
+    }
+
+    body { background: var(--surface); font-family: 'DM Sans', sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+
+    .portfolio { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    .hero { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 2rem; padding: 2.5rem 0 2rem; border-bottom: 1px solid var(--border); margin-bottom: 2.5rem; }
+
+    .hero-label { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem; }
+
+    .hero-name { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; color: var(--navy); line-height: 1.1; margin-bottom: 0.5rem; }
+
+    .hero-sub { font-size: 1rem; color: var(--text-muted); font-weight: 300; max-width: 420px; line-height: 1.6; }
+
+    .hero-badge { background: var(--navy); color: var(--gold); font-size: 11px; font-weight: 500; padding: 6px 14px; border-radius: 20px; letter-spacing: 0.06em; white-space: nowrap; margin-top: 4px; }
+
+    .section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 10px; }
+    .section-label::after { content: ''; flex: 1; height: 0.5px; background: var(--border); }
+
+    .thesis-box { background: var(--navy); color: #fff; border-radius: 12px; padding: 1.75rem 2rem; margin-bottom: 2.5rem; display: grid; grid-template-columns: auto 1fr; gap: 1.5rem; align-items: start; }
+
+    .thesis-icon { font-size: 2rem; line-height: 1; margin-top: 2px; }
+
+    .thesis-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem; }
+
+    .thesis-text { font-size: 0.875rem; color: rgba(255,255,255,0.75); line-height: 1.7; }
+
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 2.5rem; }
+
+    .proj-card { background: #fff; padding: 1.5rem; cursor: pointer; transition: background 0.15s; position: relative; }
+    .proj-card:hover { background: var(--surface); }
+    .proj-card.active { background: var(--navy); }
+
+    .proj-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 0.75rem; }
+    .tag-crm { background: #e8f4fb; color: #1a6fa0; }
+    .tag-gtm { background: #eafce8; color: #2a7a2a; }
+    .tag-content { background: #fdf3e3; color: #a06010; }
+    .tag-ops { background: #f0eafc; color: #6030a0; }
+    .tag-strategy { background: #fce8f0; color: #a03060; }
+
+    .proj-card.active .proj-tag { opacity: 0.9; }
+
+    .proj-num { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; color: var(--border); position: absolute; top: 1.5rem; right: 1.5rem; }
+    .proj-card.active .proj-num { color: rgba(255,255,255,0.25); }
+
+    .proj-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.4rem; line-height: 1.3; }
+    .proj-card.active .proj-title { color: #fff; }
+
+    .proj-sub { font-size: 0.8rem; color: var(--text-muted); }
+    .proj-card.active .proj-sub { color: rgba(255,255,255,0.6); }
+
+    .detail-panel { background: #fff; border-radius: 12px; border: 0.5px solid var(--border); padding: 2rem; margin-bottom: 2.5rem; display: none; }
+    .detail-panel.visible { display: block; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .detail-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); flex-wrap: wrap; }
+
+    .detail-title { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--navy); margin-bottom: 0.3rem; }
+    .detail-context { font-size: 0.85rem; color: var(--text-muted); }
+
+    .detail-result { background: var(--navy); color: var(--gold); font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; padding: 8px 16px; border-radius: 8px; white-space: nowrap; text-align: right; line-height: 1.4; }
+
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem; }
+    @media (max-width: 640px) { .detail-grid { grid-template-columns: 1fr; } }
+
+    .detail-block { }
+    .detail-block-label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .detail-block-text { font-size: 0.875rem; color: var(--text); line-height: 1.6; }
+
+    .ai-stack { display: flex; flex-wrap: wrap; gap: 6px; }
+    .ai-chip { background: var(--surface2); color: var(--navy); font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 20px; }
+
+    .metrics-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .metric-pill { background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; padding: 8px 14px; }
+    .metric-num { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--navy); display: block; }
+    .metric-label { font-size: 11px; color: var(--text-muted); }
+
+    .skills-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
+
+    .skill-card { background: #fff; border: 0.5px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+    .skill-icon { font-size: 1.25rem; margin-bottom: 0.5rem; line-height: 1; }
+    .skill-title { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--navy); margin-bottom: 0.4rem; }
+    .skill-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+    .cta-bar { background: var(--navy); border-radius: 12px; padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .cta-text { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: #fff; }
+    .cta-sub { font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 2px; }
+    .cta-link { background: var(--gold); color: var(--navy); font-weight: 700; font-size: 0.85rem; padding: 10px 20px; border-radius: 8px; text-decoration: none; white-space: nowrap; font-family: 'Syne', sans-serif; transition: background 0.15s; }
+    .cta-link:hover { background: #fff; }
+
+    .deliverable-link { display: inline-block; margin-top: 1rem; font-size: 0.8rem; font-weight: 500; color: var(--navy); text-decoration: none; border-bottom: 1px solid var(--gold); padding-bottom: 1px; }
+    .deliverable-link:hover { color: var(--gold-dim); }
+
+    @media (max-width: 640px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-name { font-size: 2rem; }
+      .hero-badge { justify-self: start; }
+      .detail-result { text-align: left; white-space: normal; width: 100%; }
+      .cta-bar { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="portfolio">
+
+  <div class="hero">
+    <div>
+      <div class="hero-label">AI-powered marketing portfolio</div>
+      <div class="hero-name">Sameer<br>Mohammed</div>
+      <div class="hero-sub">CRM · Growth · GTM · Salesforce Marketing Cloud<br>EDHEC Business School '25</div>
+    </div>
+    <div class="hero-badge">AI × Marketing</div>
+  </div>
+
+  <div class="section-label">The angle</div>
+
+  <div class="thesis-box">
+    <div class="thesis-icon">⚡</div>
+    <div>
+      <div class="thesis-title">Why AI in marketing — not as a tool, but as a system</div>
+      <div class="thesis-text">I don't use AI to write emails faster. I use it to build the decision layer that sits between customer data and campaign execution — the part that answers "who gets what message, when, triggered by what." That's where lifecycle marketing, CRM, and AI intersect. These projects show how I think about that intersection.</div>
+    </div>
+  </div>
+
+  <div class="section-label">Projects — click to expand</div>
+
+  <div class="projects-grid" id="projGrid">
+    <div class="proj-card" onclick="openCard(0)" id="card0">
+      <span class="proj-num">01</span>
+      <span class="proj-tag tag-crm">CRM × AI</span>
+      <div class="proj-title">AI-Powered Lifecycle Segmentation Engine</div>
+      <div class="proj-sub">Accenture · Salesforce MC + Claude API</div>
+    </div>
+    <div class="proj-card" onclick="openCard(1)" id="card1">
+      <span class="proj-num">02</span>
+      <span class="proj-tag tag-gtm">GTM × AI</span>
+      <div class="proj-title">Distributor GTM Intelligence System</div>
+      <div class="proj-sub">Lesaffre · B2B positioning + AI research</div>
+    </div>
+    <div class="proj-card" onclick="openCard(2)" id="card2">
+      <span class="proj-num">03</span>
+      <span class="proj-tag tag-strategy">Strategy × AI</span>
+      <div class="proj-title">Lacoste US Market Entry Strategy</div>
+      <div class="proj-sub">EDHEC · Urban segmentation + AI positioning</div>
+    </div>
+    <div class="proj-card" onclick="openCard(3)" id="card3">
+      <span class="proj-num">04</span>
+      <span class="proj-tag tag-strategy">Contest Winner 🏆</span>
+      <div class="proj-title">La Redoute Growth Strategy</div>
+      <div class="proj-sub">EDHEC · E-commerce GMV + marketplace innovation</div>
+    </div>
+    <div class="proj-card" onclick="openCard(4)" id="card4">
+      <span class="proj-num">05</span>
+      <span class="proj-tag tag-gtm">GTM × AI</span>
+      <div class="proj-title">P&G Ninjamas Go-to-Market (Finalist)</div>
+      <div class="proj-sub">EDHEC · Consumer behaviour + AI segmentation</div>
+    </div>
+    <div class="proj-card" onclick="openCard(5)" id="card5">
+      <span class="proj-num">06</span>
+      <span class="proj-tag tag-gtm">Market × AI</span>
+      <div class="proj-title">Carrefour BIO Consumer Segmentation</div>
+      <div class="proj-sub">EDHEC · Marketplace performance + CSR strategy</div>
+    </div>
+    <div class="proj-card" onclick="openCard(6)" id="card6">
+      <span class="proj-num">07</span>
+      <span class="proj-tag tag-ops">Ops × AI</span>
+      <div class="proj-title">Retail KPI Dashboard + AI Anomaly Alerts</div>
+      <div class="proj-sub">ExxonMobil · Ops intelligence layer</div>
+    </div>
+    <div class="proj-card" onclick="openCard(7)" id="card7">
+      <span class="proj-num">08</span>
+      <span class="proj-tag tag-content">Content × AI</span>
+      <div class="proj-title">AI LinkedIn Content Engine</div>
+      <div class="proj-sub">Personal brand · Algorithm-led content system</div>
+    </div>
+  </div>
+
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-header">
+      <div>
+        <div class="detail-title" id="dTitle"></div>
+        <div class="detail-context" id="dContext"></div>
+      </div>
+      <div class="detail-result" id="dResult"></div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-block">
+        <div class="detail-block-label">The problem</div>
+        <div class="detail-block-text" id="dProblem"></div>
+      </div>
+      <div class="detail-block">
+        <div class="detail-block-label">What I built</div>
+        <div class="detail-block-text" id="dBuilt"></div>
+      </div>
+      <div class="detail-block">
+        <div class="detail-block-label">AI tools used</div>
+        <div class="ai-stack" id="dTools"></div>
+      </div>
+      <div class="detail-block">
+        <div class="detail-block-label">Outcomes</div>
+        <div class="metrics-row" id="dMetrics"></div>
+      </div>
+    </div>
+    <a href="#" class="deliverable-link" id="dLink" target="_blank">View deliverable →</a>
+  </div>
+
+  <div class="section-label">AI skill set</div>
+
+  <div class="skills-row">
+    <div class="skill-card">
+      <div class="skill-icon">🧠</div>
+      <div class="skill-title">Prompt engineering</div>
+      <div class="skill-desc">Structured prompting for marketing workflows — segmentation logic, copy generation, competitive analysis</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">⚙️</div>
+      <div class="skill-title">AI workflow design</div>
+      <div class="skill-desc">Building multi-step AI pipelines that connect to CRM tools, not just one-shot prompts</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">📊</div>
+      <div class="skill-title">Data × AI synthesis</div>
+      <div class="skill-desc">Taking structured CRM/ops data and using AI to surface patterns humans miss at volume</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">✍️</div>
+      <div class="skill-title">AI content at scale</div>
+      <div class="skill-desc">Lifecycle email variants, A/B test copy, and LinkedIn posts — structured for performance, not just speed</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🎯</div>
+      <div class="skill-title">GTM research automation</div>
+      <div class="skill-desc">Using AI to compress weeks of competitor and market research into structured positioning briefs</div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🔌</div>
+      <div class="skill-title">API-layer thinking</div>
+      <div class="skill-desc">Understanding how AI APIs connect to Salesforce, HubSpot, and marketing stacks — not just using UIs</div>
+    </div>
+  </div>
+
+  <div class="cta-bar">
+    <div>
+      <div class="cta-text">Open to CRM · Growth · GTM roles — Asia, Europe, Middle East</div>
+      <div class="cta-sub">Available from July 2025 · sameer.mohammed@edhec.com</div>
+    </div>
+    <a class="cta-link" href="https://www.linkedin.com/in/mohammed-sameerbm/">View LinkedIn →</a>
+  </div>
+
+</div>
+
+<script>
+const projects = [
+  {
+    title: "AI-Powered Lifecycle Segmentation Engine",
+    context: "Case Study · Accenture CRM Delivery · Rebuilt with AI augmentation · Salesforce Marketing Cloud",
+    result: "+25% open rate\\n+15% retention",
+    problem: "Most CRM teams segment by demographics. The real drop-offs happen between sends — in the behavioural gaps nobody maps. Generic segments produce generic results.",
+    built: "Designed a 6-stage lifecycle framework with AI-generated segment hypotheses based on behavioural signals, then mapped each stage to trigger conditions in Salesforce MC. Used Claude to generate A/B copy variants per segment.",
+    tools: ["Claude API", "Salesforce MC", "Tableau", "Prompt templates"],
+    metrics: [{ num: "+25%", label: "Open rate" }, { num: "+20%", label: "CTR" }, { num: "+15%", label: "Retention" }],
+    link: "https://motley-whimsey-f54.notion.site/AI-Powered-Lifecycle-Segmentation-Engine-35986eac11c680ffa6bbd8ded4bc30b7"
+  },
+  {
+    title: "Distributor GTM Intelligence System",
+    context: "Lesaffre consulting project · EDHEC MiM · B2B market entry",
+    result: "+20% distributor\\nadoption rate",
+    problem: "The product was good. Distributors didn't know how to sell it. GTM was built around features, not the story a distributor can repeat in 30 seconds to a customer.",
+    built: "Used AI to analyse 20+ distributor interview transcripts for recurring objection patterns. Built a positioning brief and demo playbook structure using AI-synthesised insight. Tested messaging variants across distributor segments.",
+    tools: ["Claude", "Interview synthesis", "Notion AI", "Positioning framework"],
+    metrics: [{ num: "20+", label: "Interviews processed" }, { num: "+20%", label: "Adoption rate" }, { num: "15%", label: "Satisfaction lift" }],
+    link: "https://motley-whimsey-f54.notion.site/Distributor-GTM-Intelligence-System-35986eac11c6803981f5fc29bb2997b0"
+  },
+  {
+    title: "Lacoste US Market Entry Strategy",
+    context: "EDHEC International Marketing Project · Strategy Analyst · Sep 2024 – Jan 2025",
+    result: "3 urban markets\\nanalyzed",
+    problem: "Lacoste wanted to expand in the US but lacked clarity on which urban customer groups offered the highest growth potential. The brand needed a data-backed targeting strategy, not assumptions.",
+    built: "Conducted market segmentation to identify high-potential urban customer groups across key US cities. Analyzed consumer behavior and brand positioning data to define target audience strategy. Developed tailored positioning aligned with Lacoste's brand identity and US expansion goals.",
+    tools: ["Claude", "Market research", "Segmentation framework", "Positioning analysis"],
+    metrics: [{ num: "3+", label: "Urban markets analyzed" }, { num: "1", label: "Positioning framework delivered" }, { num: "1", label: "Market entry decision informed" }],
+    link: "https://motley-whimsey-f54.notion.site/Lacoste-US-Market-Entry-Strategy-35986eac11c6802ebb28d865a5fa8d86"
+  },
+  {
+    title: "La Redoute Growth Strategy — Contest Winner 🏆",
+    context: "EDHEC Strategy Competition · Strategy Lead · Jan 2024 – Apr 2024",
+    result: "Top 5 of 40+\\nteams",
+    problem: "La Redoute was losing ground in European e-commerce. Home & apparel categories faced GMV stagnation while competitors captured marketplace share through curated experiences and faster fulfillment.",
+    built: "Analyzed home & apparel e-commerce landscape across Europe, identifying key drivers of GMV growth and competitive gaps. Identified high-value customer segments and uncovered growth opportunities in second-life and curated product categories. Evaluated marketplace and fulfillment models. Developed strategic innovation roadmap aligned with CSR and operational constraints.",
+    tools: ["Claude", "Market analysis", "GMV modeling", "Competitive benchmarking"],
+    metrics: [{ num: "Top 5", label: "Of 40+ teams" }, { num: "1", label: "High-ROI roadmap delivered" }, { num: "1", label: "International expansion informed" }],
+    link: "https://motley-whimsey-f54.notion.site/La-Redoute-Growth-Strategy-Contest-Winner-35986eac11c680da953dfe326b81856f"
+  },
+  {
+    title: "P&G Ninjamas Go-to-Market — Finalist",
+    context: "EDHEC Marketing Strategy Competition · GTM & Segmentation Analyst · Sep 2023 – Dec 2023",
+    result: "Top 10 finalist\\nof 200+ teams",
+    problem: "P&G's Ninjamas brand had low awareness in the enuresis category. The challenge was identifying why parents weren't adopting the product and what messaging would break through in a sensitive, under-discussed market.",
+    built: "Analyzed consumer behavior through primary research to identify key drivers behind awareness and adoption. Defined target audience segments and positioning strategy based on market, competitor, and behavioral insights. Developed go-to-market campaign recommendations to improve awareness and market penetration.",
+    tools: ["Claude", "Primary research", "Consumer behavior analysis", "GTM planning"],
+    metrics: [{ num: "Top 10", label: "Finalist of 200+ teams" }, { num: "1", label: "Segmentation framework delivered" }, { num: "1", label: "Campaign strategy proposed" }],
+    link: "https://motley-whimsey-f54.notion.site/P-G-Ninjamas-Go-to-Market-Finalist-35986eac11c68067bc57e72046fd1e0e"
+  },
+  {
+    title: "Carrefour BIO Consumer Segmentation",
+    context: "EDHEC coursework · Carrefour BIO marketplace · Team of 4 · Sep 2024 – Dec 2024",
+    result: "3 actionable\\nsegments found",
+    problem: "Carrefour BIO had performance data but no clear view of who their customers actually were or why some segments over-indexed on organic products while others dropped off after first purchase.",
+    built: "Used AI tools to synthesise secondary research, cluster customer behaviour patterns from survey data, and build personas with actionable positioning. Mapped segments to Carrefour's marketplace performance metrics and CSR strategy.",
+    tools: ["Claude", "Qualtrics data", "AI persona builder", "Tableau"],
+    metrics: [{ num: "3", label: "Segments defined" }, { num: "4", label: "Market variables mapped" }, { num: "1", label: "Published EDHEC project" }],
+    link: "https://motley-whimsey-f54.notion.site/AI-Assisted-Consumer-Segmentation-Study-35986eac11c680199d29d224bd2c9b89"
+  },
+  {
+    title: "Retail KPI Dashboard + AI Anomaly Alerts",
+    context: "ExxonMobil internship · Operations case study · AI alert layer design",
+    result: "–10% wait\\ntime reduction",
+    problem: "Management was measuring daily average wait times. The problem was hiding inside the data — a 2-hour peak window between 11am–1pm that averaged out of sight. Averages kill visibility.",
+    built: "Built hourly KPI dashboards in Tableau to expose the peak. Designed an AI alert layer concept: clustering algorithms to flag deviation from expected hourly patterns and surface recommendations to operations teams.",
+    tools: ["Tableau", "Excel", "AI alert framework", "Foot traffic data"],
+    metrics: [{ num: "–10%", label: "Wait time drop" }, { num: "5+", label: "Sites analysed" }, { num: "15%", label: "Sales lift" }],
+    link: "https://motley-whimsey-f54.notion.site/Retail-KPI-Dashboard-with-AI-Anomaly-Alerts-35986eac11c680a3bad5e96653e1c404"
+  },
+  {
+    title: "AI LinkedIn Content Engine",
+    context: "Personal brand project · 1,200+ followers · 6-week sprint",
+    result: "3× impression\\nrate increase",
+    problem: "Marketing professionals post randomly and wonder why nothing lands. The algorithm rewards structure and expertise signals — not effort. Most content strategies ignore both.",
+    built: "Built a repeatable content system: AI-assisted hook generation, LinkedIn algorithm-optimised post structure, weekly editorial calendar tied to professional domains (CRM, GTM, retail ops). Tested formats, tracked impressions.",
+    tools: ["Claude", "ChatGPT", "DALL-E (infographics)", "LinkedIn analytics"],
+    metrics: [{ num: "475", label: "Peak impressions" }, { num: "3×", label: "Impression lift" }, { num: "9", label: "Posts published" }],
+    link: "https://motley-whimsey-f54.notion.site/AI-Assisted-Personal-Brand-Experiment-35986eac11c6800a8cf0e12fac2e5232"
+  }
+];
+
+let activeIdx = null;
+
+function openCard(idx) {
+  const cards = document.querySelectorAll('.proj-card');
+  const panel = document.getElementById('detailPanel');
+
+  if (activeIdx === idx) {
+    cards[idx].classList.remove('active');
+    panel.classList.remove('visible');
+    activeIdx = null;
+    return;
+  }
+
+  cards.forEach(c => c.classList.remove('active'));
+  cards[idx].classList.add('active');
+  activeIdx = idx;
+
+  const p = projects[idx];
+  document.getElementById('dTitle').textContent = p.title;
+  document.getElementById('dContext').textContent = p.context;
+  document.getElementById('dResult').innerHTML = p.result.replace('\\n', '<br>');
+  document.getElementById('dProblem').textContent = p.problem;
+  document.getElementById('dBuilt').textContent = p.built;
+  document.getElementById('dLink').href = p.link;
+
+  const toolsEl = document.getElementById('dTools');
+  toolsEl.innerHTML = p.tools.map(t => `<span class="ai-chip">${t}</span>`).join('');
+
+  const metricsEl = document.getElementById('dMetrics');
+  metricsEl.innerHTML = p.metrics.map(m => `<div class="metric-pill"><span class="metric-num">${m.num}</span><span class="metric-label">${m.label}</span></div>`).join('');
+
+  panel.classList.add('visible');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+window.onload = function() {
+  openCard(0);
+};
+</script>
+
+</body>
+</html>'''
+
+with open('/mnt/agents/output/sameer_portfolio_v2_FINAL.html', 'w', encoding='utf-8') as f:
+    f.write(final_html_v2)
+
+print(f"Final portfolio v2 saved: {len(final_html_v2)} characters")
+print("All 8 Notion links embedded successfully")
+print("Projects: 01-Accenture, 02-Lesaffre, 03-Lacoste, 04-La Redoute, 05-P&G, 06-Carrefour, 07-ExxonMobil, 08-LinkedIn")
